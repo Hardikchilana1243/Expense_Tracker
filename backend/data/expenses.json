@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1772800001000,
+    "userId": 1772627681315,
+    "category": "Groceries",
+    "amount": 2000,
+    "description": "Weekly groceries",
+    "createdAt": "2026-03-05T10:30:00.000Z"
+  },
+  {
+    "id": 1772800002000,
+    "userId": 1772627681315,
+    "category": "Electricity",
+    "amount": 1200,
+    "description": "Monthly electricity bill",
+    "createdAt": "2026-03-04T09:15:00.000Z"
+  },
+  {
+    "id": 1772800003000,
+    "userId": 1772627681315,
+    "category": "Transportation",
+    "amount": 500,
+    "description": "Fuel for car",
+    "createdAt": "2026-03-03T14:20:00.000Z"
+  },
+  {
+    "id": 1772802094267,
+    "userId": 1772784021013,
+    "category": "👗 Clothes",
+    "amount": 10000,
+    "description": "i bought a new dress\n",
+    "createdAt": "2026-03-06T13:01:34.267Z"
+  },
+  {
+    "id": 1772803943006,
+    "userId": 1772784021013,
+    "category": "🏠 Rent",
+    "amount": 34442,
+    "description": "asSSQ",
+    "createdAt": "2026-03-06T13:32:23.006Z"
+  },
+  {
+    "id": 1776757300718,
+    "userId": 1772799859271,
+    "category": "🛒 Shopping",
+    "amount": 1300,
+    "description": "make up",
+    "createdAt": "2026-04-21T07:41:40.718Z"
+  },
+  {
+    "id": 1776757315800,
+    "userId": 1772799859271,
+    "category": "🛒 Shopping",
+    "amount": 500,
+    "description": "jewellery",
+    "createdAt": "2026-04-21T07:41:55.800Z"
+  },
+  {
+    "id": 1776757373569,
+    "userId": 1772799859271,
+    "category": "🛒 Shopping",
+    "amount": 700,
+    "description": "hair accessories",
+    "createdAt": "2026-04-21T07:42:53.569Z"
+  },
+  {
+    "id": 1776757409359,
+    "userId": 1772799859271,
+    "category": "✈️ Travel",
+    "amount": 400,
+    "description": "bus",
+    "createdAt": "2026-04-21T07:43:29.359Z"
+  }
+]

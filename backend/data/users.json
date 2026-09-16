@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1772627681315,
+    "fullName": "Priya",
+    "email": "priya123@gmail.com",
+    "password": "priya123"
+  },
+  {
+    "id": 1772628017241,
+    "fullName": "Test user",
+    "email": "testuser@yopmail.com",
+    "password": "Ayushika1@"
+  },
+  {
+    "id": 1772784021013,
+    "fullName": "Manya",
+    "email": "manyabansal12@gmail.com",
+    "password": "manya12"
+  },
+
+  {
+    "id": 1772788740247,
+    "fullName": "Ram Ahuja",
+    "email": "ram13@gmail.com",
+    "password": "ram13"
+  },
+  
+  {
+    "id": 1772788804565,
+    "fullName": "Priya ",
+    "email": "priya13@gmail.com",
+    "password": "priya@13"
+  },
+  {
+    "id": 1772799859271,
+    "fullName": "hardikkk",
+    "email": "h2154678@gmail.com",
+    "password": "Hardik@2007"
+  }
+]

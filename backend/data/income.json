@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1772800010000,
+    "userId": 1772627681315,
+    "category": "Salary",
+    "amount": 25000,
+    "description": "Monthly salary",
+    "createdAt": "2026-03-01T09:00:00.000Z"
+  },
+  {
+    "id": 1772800011000,
+    "userId": 1772627681315,
+    "category": "Freelance",
+    "amount": 5000,
+    "description": "Freelance project payment",
+    "createdAt": "2026-02-28T16:45:00.000Z"
+  },
+  {
+    "id": 1772802073168,
+    "userId": 1772784021013,
+    "category": "💼 Salary",
+    "amount": 80000,
+    "description": "this is my first salary as software developer",
+    "createdAt": "2026-03-06T13:01:13.168Z"
+  },
+  {
+    "id": 1772803930693,
+    "userId": 1772784021013,
+    "category": "🎵 Royalty",
+    "amount": 1212,
+    "description": "1212",
+    "createdAt": "2026-03-06T13:32:10.693Z"
+  },
+  {
+    "id": 1776757273073,
+    "userId": 1772799859271,
+    "category": "💼 Salary",
+    "amount": 5000,
+    "description": "vibin'z",
+    "createdAt": "2026-04-21T07:41:13.073Z"
+  }
+]
