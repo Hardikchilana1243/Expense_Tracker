@@ -11,12 +11,13 @@ import App from "./App.jsx";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-console.log(
-  "🔍 Google Client ID loaded:",
-  clientId ? "✅ Found" : "❌ Missing"
-);
-
-console.log("🔍 Environment:", import.meta.env.MODE);
+if (import.meta.env.DEV) {
+  console.log(
+    "🔍 Google Client ID loaded:",
+    clientId ? "✅ Found" : "❌ Missing"
+  );
+  console.log("🔍 Environment:", import.meta.env.MODE);
+}
 
 try {
   const root = document.getElementById("root");

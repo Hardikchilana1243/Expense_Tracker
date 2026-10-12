@@ -13,8 +13,10 @@ const GoogleAuthButton = ({ setError, setLoading, loading }) => {
   useEffect(() => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-    console.log("🔥 CLIENT ID:", clientId);
-    console.log("🔥 ORIGIN:", window.location.origin);
+    if (import.meta.env.DEV) {
+      console.log("🔥 CLIENT ID:", clientId);
+      console.log("🔥 ORIGIN:", window.location.origin);
+    }
 
     if (!clientId) {
       setClientIdMissing(true);

@@ -1,4 +1,15 @@
-const { rateLimit } = require("express-rate-limit");
+const expressRateLimit = require("express-rate-limit");
+
+// Robust resolution supporting CommonJS, default export, or named export across runtimes
+const rateLimit = typeof expressRateLimit === "function"
+  ? expressRateLimit
+  : (expressRateLimit?.rateLimit || expressRateLimit?.default);
+
+if (typeof rateLimit !== "function") {
+  throw new TypeError(
+    `[rateLimiterMiddleware] Failed to resolve rateLimit function from 'express-rate-limit'. Received type: ${typeof expressRateLimit}`
+  );
+}
 
 const createStructuredLimiter = ({
   windowMs,
@@ -8,23 +19,23 @@ const createStructuredLimiter = ({
 }) => {
   const windowSec = Math.ceil(windowMs / 1000);
 
-  return rateLimit({
+  const limiter = rateLimit({
     windowMs,
-
     limit:
       process.env.NODE_ENV === "development"
         ? limit * 3
         : limit,
-
     standardHeaders: true,
     legacyHeaders: false,
-
+    validate: {
+      trustProxy: false,
+      xForwardedForHeader: false,
+    },
     handler: (req, res) => {
       res.setHeader("Retry-After", windowSec);
 
       console.warn(
-        `[RateLimit] ⚠️ 429 Triggered | Method: ${req.method} | URL: ${req.originalUrl || req.url
-        } | IP: ${req.ip}`
+        `[RateLimit] ⚠️ 429 Triggered | Method: ${req.method} | URL: ${req.originalUrl || req.url} | IP: ${req.ip}`
       );
 
       return res.status(429).json({
@@ -37,6 +48,14 @@ const createStructuredLimiter = ({
       });
     },
   });
+
+  if (typeof limiter !== "function") {
+    throw new TypeError(
+      `[rateLimiterMiddleware] rateLimit() did not return a valid middleware function. Got: ${typeof limiter}`
+    );
+  }
+
+  return limiter;
 };
 
 // 1. Login
@@ -79,10 +98,21 @@ const generalApiLimiter = createStructuredLimiter({
     "Too many requests. Please slow down.",
 });
 
-module.exports = {
+const exportedLimiters = {
   loginLimiter,
   signupLimiter,
   googleAuthLimiter,
   sessionAuthLimiter,
   generalApiLimiter,
 };
+
+// Startup validation check on all exported rate limiters
+for (const [name, fn] of Object.entries(exportedLimiters)) {
+  if (typeof fn !== "function") {
+    throw new TypeError(
+      `[rateLimiterMiddleware] Export '${name}' is not a function (got ${typeof fn}). Middleware initialization failed.`
+    );
+  }
+}
+
+module.exports = exportedLimiters;

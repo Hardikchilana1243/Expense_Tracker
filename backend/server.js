@@ -4,16 +4,27 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-
 const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
 
 const app = express();
+
+// Trust reverse proxy (Vercel / AWS ELB / Cloudflare) for accurate client IP in rate limiting & cookies
+app.set("trust proxy", 1);
 
 // ✅ Helmet Security Headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
+
+// Diagnostic helper: Assert that middleware or route handler is a valid function before mounting
+function assertMiddleware(name, handler) {
+  if (typeof handler !== "function") {
+    throw new TypeError(
+      `[Startup Error] Middleware/Router '${name}' must be a function, but received type '${typeof handler}'. Check CommonJS exports in the module.`
+    );
+  }
+  return handler;
+}
 
 const { generalApiLimiter } = require("./middleware/rateLimiterMiddleware");
 
@@ -98,24 +109,28 @@ app.use(cors({
 // ✅ Cookie parser
 app.use(cookieParser());
 
-// Apply global general API rate limiter
-app.use("/api/v1/", generalApiLimiter);
+// Apply global general API rate limiter with explicit type assertion
+app.use("/api/v1/", assertMiddleware("generalApiLimiter", generalApiLimiter));
+
+// ================= HEALTH CHECK ROUTES =================
+// Support root /health, /api/health, and /api/v1/health for direct service and rewritten health monitoring
+const healthHandler = (req, res) => res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+app.get("/health", healthHandler);
+app.get("/api/health", healthHandler);
+app.get("/api/v1/health", healthHandler);
 
 // ================= ROUTES =================
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/dashboard", dashboardRoutes);
-app.use("/api/v1/expenses", expenseRoutes);
-app.use("/api/v1/income", incomeRoutes);
-app.use("/api/v1/budgets", budgetRoutes);
-app.use("/api/v1/insights", insightRoutes);
-app.use("/api/v1/transactions", transactionRoutes);
-app.use("/api/v1/mock", mockRoutes);
-app.use("/api/v1/notifications", notificationRoutes);
-app.use("/api/v1/statements", statementRoutes);
-app.use("/api/v1/ai", aiAdvisorRoutes);
-
-// Health check
-app.get("/health", (req, res) => res.json({ status: "OK" }));
+app.use("/api/v1/auth", assertMiddleware("authRoutes", authRoutes));
+app.use("/api/v1/dashboard", assertMiddleware("dashboardRoutes", dashboardRoutes));
+app.use("/api/v1/expenses", assertMiddleware("expenseRoutes", expenseRoutes));
+app.use("/api/v1/income", assertMiddleware("incomeRoutes", incomeRoutes));
+app.use("/api/v1/budgets", assertMiddleware("budgetRoutes", budgetRoutes));
+app.use("/api/v1/insights", assertMiddleware("insightRoutes", insightRoutes));
+app.use("/api/v1/transactions", assertMiddleware("transactionRoutes", transactionRoutes));
+app.use("/api/v1/mock", assertMiddleware("mockRoutes", mockRoutes));
+app.use("/api/v1/notifications", assertMiddleware("notificationRoutes", notificationRoutes));
+app.use("/api/v1/statements", assertMiddleware("statementRoutes", statementRoutes));
+app.use("/api/v1/ai", assertMiddleware("aiAdvisorRoutes", aiAdvisorRoutes));
 
 // 404 handler
 app.use((req, res) => {
@@ -151,4 +166,3 @@ if (require.main === module) {
     console.log("  PUT  /api/v1/notifications/preferences\n");
   });
 }
-

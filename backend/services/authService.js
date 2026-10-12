@@ -1,7 +1,10 @@
 const User = require("../models/User");
 const { OAuth2Client } = require("google-auth-library");
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const getGoogleClient = () => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  return new OAuth2Client(clientId);
+};
 
 /**
  * Register a new user in database
@@ -50,6 +53,7 @@ const authenticateGoogleToken = async (googleToken) => {
     throw error;
   }
 
+  const googleClient = getGoogleClient();
   const ticket = await googleClient.verifyIdToken({
     idToken: googleToken,
     audience: process.env.GOOGLE_CLIENT_ID,
