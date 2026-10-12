@@ -43,5 +43,10 @@ router.post("/google", googleAuthLimiter, googleAuth);
 router.get("/me", sessionAuthLimiter, getCurrentUser);
 router.post("/logout", logoutUser);
 router.get("/getUser", authMiddleware, getUserInfo);
+// Dual export compatibility: direct Express router function, default export, and named export
+router.default = router;
+router.router = router;
 
 module.exports = router;
+module.exports.default = router;
+module.exports.router = router;

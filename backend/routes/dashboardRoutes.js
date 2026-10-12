@@ -425,5 +425,10 @@ router.get("/summary-stats/:userId", async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+// Dual export compatibility: direct Express router function, default export, and named export
+router.default = router;
+router.router = router;
 
 module.exports = router;
+module.exports.default = router;
+module.exports.router = router;

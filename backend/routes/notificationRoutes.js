@@ -39,5 +39,10 @@ router.post("/trigger-monthly-reports", triggerMonthlyReports);
 router.get("/:userId", validateUserId, getNotifications);
 router.put("/:userId/read-all", validateUserId, markAllAsRead);
 router.put("/:userId/:notificationId/read", validateUserId, validateMongoId("notificationId"), markAsRead);
+// Dual export compatibility: direct Express router function, default export, and named export
+router.default = router;
+router.router = router;
 
 module.exports = router;
+module.exports.default = router;
+module.exports.router = router;

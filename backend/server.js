@@ -16,15 +16,30 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
 
-// Diagnostic helper: Assert that middleware or route handler is a valid function before mounting
+// Diagnostic helper: Assert that middleware or route handler is a valid function before mounting,
+// safely unwrapping standard CommonJS/ESM interop wrappers (.default, .router) while strictly
+// rejecting invalid exports with a descriptive diagnostic.
 function assertMiddleware(name, handler) {
-  if (typeof handler !== "function") {
-    throw new TypeError(
-      `[Startup Error] Middleware/Router '${name}' must be a function, but received type '${typeof handler}'. Check CommonJS exports in the module.`
-    );
+  if (typeof handler === "function") {
+    return handler;
   }
-  return handler;
+  if (handler && typeof handler.default === "function") {
+    return handler.default;
+  }
+  if (handler && typeof handler.router === "function") {
+    return handler.router;
+  }
+  if (handler && typeof handler[name] === "function") {
+    return handler[name];
+  }
+
+  const keys = handler && typeof handler === "object" ? Object.keys(handler).join(", ") : "none";
+  throw new TypeError(
+    `[Startup Error] Middleware/Router '${name}' must be a function or export a router function on .default/.router, but received type '${typeof handler}' with keys: [${keys}]. Check exports in the module.`
+  );
 }
+
+app.assertMiddleware = assertMiddleware;
 
 const { generalApiLimiter } = require("./middleware/rateLimiterMiddleware");
 
